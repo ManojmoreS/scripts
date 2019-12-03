@@ -19,8 +19,6 @@ def missing_element_array
   find_missing(test_array, arr_size)
 end
 
-
-
 # Count zeros in a row wise and column wise sorted matrix
 def count_zero_in_matrix
   # matrix = [[1,1,1,1,0],[0,0,0,1,1],[1,0,1,0,1],[0,0,0,0,0]]
@@ -70,4 +68,42 @@ def count_zero_in_matrix
     benchmark.report("ruby_zero_count : "){p ruby_zero_count(matrix)}
   end
 end
-count_zero_in_matrix
+# count_zero_in_matrix
+
+# Matrix sum prinicpal & secondary diagonal
+def matrix_diagonal
+  require 'matrix'
+  p "Enter value of N for NxN Matrix to find Principal & Secondary diagonal"
+  n = gets.chomp.to_i
+   def without_library(n)
+     pd1,sd1=[0,0]
+     matrix = []
+     (0...n).each{ |i| temp = []; (0...n).each{ |j| temp[j]= rand(9); matrix[i]=temp}}
+     # p matrix
+     (0...n).each do |i|
+       (0...n).each do |j|
+         pd1+=matrix[i][j] if i==j
+         sd1+=matrix[i][j] if i+j == n-1
+       end
+     end
+     [pd1, sd1]
+   end
+   def with_library(n)
+     require 'matrix'
+     pd2,sd2=[0,0]
+     matrix = Matrix.build(n) { rand(9) }
+     # p matrix
+     # PD = matrix.tr()
+     matrix.to_a.each_with_index do |r,i|
+       pd2+=r[i]
+       sd2+=r[-i-1]
+     end
+     [pd2, sd2]
+   end
+
+   Benchmark.bm do |benchmark|
+     benchmark.report("without_library : "){p without_library(n)}
+     benchmark.report("with_library : "){p with_library(n)}
+   end
+end
+matrix_diagonal
